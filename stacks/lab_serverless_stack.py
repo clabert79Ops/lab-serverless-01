@@ -77,7 +77,7 @@ class LabServerlessStack(Stack):
             handler="index.handler",
             code=_lambda.Code.from_asset("lambda/event_logger"),
             memory_size=128,
-            timeout=cdk.Duration.seconds(30),
+            timeout=Duration.seconds(30),
             role=lambda_role,
             vpc=vpc,
             vpc_subnets=ec2.SubnetSelection(
