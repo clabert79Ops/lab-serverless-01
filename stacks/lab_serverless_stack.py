@@ -1,4 +1,5 @@
 from aws_cdk import (
+    Duration,
     Stack,
     CfnParameter,
     RemovalPolicy,
