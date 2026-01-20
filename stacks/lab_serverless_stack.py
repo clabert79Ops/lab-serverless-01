@@ -10,6 +10,10 @@ from aws_cdk import (
 )
 from constructs import Construct
 
+from aws_cdk import aws_apigatewayv2 as apigwv2
+from aws_cdk import aws_apigatewayv2_integrations as integrations
+from aws_cdk import CfnOutput
+
 class LabServerlessStack(Stack):
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
@@ -84,3 +88,25 @@ class LabServerlessStack(Stack):
                 subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
             ),
         )
+
+        http_api = apigwv2.HttpApi(
+            self,
+            "EventLoggerHttpApi",
+            api_name="event-logger-http-api",
+        )
+
+        http_api.add_routes(
+            path="/",
+            methods=[apigwv2.HttpMethod.ANY],
+            integration=integrations.LambdaProxyIntegration(
+                "LambdaIntegration",
+                 handler=event_logger,
+                ),
+        )
+
+        CfnOutput(
+            self,
+            "HttpApiUrl",
+            value=http_api.url
+        )
+
