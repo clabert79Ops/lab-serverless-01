@@ -90,18 +90,18 @@ class LabServerlessStack(Stack):
         )
 
         http_api = apigwv2.HttpApi(
-            self,
-            "EventLoggerHttpApi",
-            api_name="event-logger-http-api",
+                        self,
+                        "EventLoggerHttpApi",
+                        api_name="event-logger-http-api",
         )
 
         http_api.add_routes(
             path="/",
             methods=[apigwv2.HttpMethod.ANY],
-            integration=integrations.LambdaProxyIntegration(
+            integration=integrations.HttpLambdaIntegration(
                 "LambdaIntegration",
-                 handler=event_logger,
-                ),
+                handler=event_logger,
+            ),
         )
 
         CfnOutput(
